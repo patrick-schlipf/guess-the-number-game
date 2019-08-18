@@ -1,35 +1,6 @@
-//*****************************************************************************
-//*
-//* FILE NAME:  MessageGeneratorImpl.java
-//*
-//* IBM Confidential
-//*
-//*  OCO Source Materials
-//*
-//*  5698-SA4
-//*
-//*  © Copyright IBM Corp. 2019
-//*
-//*   The source code for this program is not published or otherwise
-//*   divested of its trade secrets, irrespective of what has been
-//*   deposited with the U.S. Copyright Office.
-//*
-//*****************************************************************************
-//*
-//* CLASSES:
-//*            MessageGeneratorImpl   (externally documented: no )
-//*
-//* CHANGE HISTORY:
-//*
-//*   Change Date     UserID   Description
-//*   -----  -------- -------- ------------------------------------------------
-//*   y0001  12072019 psch     Initial Version
-//*
-//*****************************************************************************
 package udemy.academy.learnprogramming;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,12 +8,16 @@ import javax.annotation.PostConstruct;
 
 
 @Component
+@Slf4j
 public class MessageGeneratorImpl implements MessageGenerator {
 
-    private final Logger log = LoggerFactory.getLogger(MessageGenerator.class);
+    private final Game game;
 
-    private Game game;
-    private int guessCount = 10;
+
+    @Autowired
+    public MessageGeneratorImpl(Game game) {
+        this.game = game;
+    }
 
     @PostConstruct
     public void init() {
@@ -50,21 +25,34 @@ public class MessageGeneratorImpl implements MessageGenerator {
         log.debug("Game value: {}", this.game);
     }
 
-
     @Override
     public String getMainMessage() {
-        return "Method call 'getMainMessage()'";
+        return String.format(
+                "Number is between %d and %d. Can you guess it?",
+                this.game.getSmallest(),
+                this.game.getBiggest()
+        );
     }
 
     @Override
     public String getResultMessage() {
-        return "Method call 'getResultMessage()'";
+        if (this.game.isGameWon())
+            return "You guessed it. The number was " + this.game.getNumber();
+        else if (this.game.isGameLost())
+            return "You lost. The number was " + this.game.getNumber();
+        else if (!this.game.isValidNumberRange())
+            return "Invalid number range.";
+        else if (this.game.getRemainingGuesses() == this.game.getGuessCount())
+            return "What is your first guess?";
+
+        String direction = "Lower";
+        if (this.game.getGuess() < this.game.getNumber())
+            direction = "Higher";
+
+        return String.format(
+                "%s! You have %d guesses left.",
+                direction,
+                this.game.getRemainingGuesses()
+        );
     }
-
-
-    @Autowired
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
 }

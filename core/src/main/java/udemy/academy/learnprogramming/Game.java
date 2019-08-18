@@ -43,6 +43,8 @@ public interface Game {
 
     int getRemainingGuesses();
 
+    int getGuessCount();
+
     void reset();
 
     void check();

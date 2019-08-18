@@ -11,5 +11,23 @@
 
     <artifactId>console</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>udemy.academy.learnprogramming</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+    </dependencies>
 
+
+    <build>
+        <plugins>
+
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+    </build>
 </project>

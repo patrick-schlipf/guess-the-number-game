@@ -5,7 +5,7 @@
         </encoder>
     </appender>
 
-    <logger name="udemy.academy.learnprogramming" level="DEBUG" />
+    <logger name="udemy.academy.learnprogramming" level="DEBUG"/>
 
     <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
